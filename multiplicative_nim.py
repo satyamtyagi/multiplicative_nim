@@ -145,26 +145,25 @@ def find_reduced_non_convertible(non_convertible, all_positions, prime, max_valu
         print(f"Filtered position: {filtered_position}, product: {np.prod(filtered_position)}")
     
     for combo in non_convertible:
-        original_product = np.prod(combo)
         
         # Calculate the target product
         m = original_product % prime
         target_product = original_product - m + 1
         
-        print(f"\nChecking {combo} for reduction:")
+        print(f"\nChecking {position} for reduction:")
         print(f"Original product: {original_product}, prime: {prime}, m: {m}, target: {target_product}")
         
-        # Check if any filtered combination has the target product
+        # Check if any filtered position has the target product
         can_convert = False
-        for filtered_combo in filtered_combinations:
-            if np.prod(filtered_combo) == target_product:
-                print(f"Found conversion: {combo} can be converted to {filtered_combo} with product {target_product}")
+        for filtered_position in filtered_positions:
+            if np.prod(filtered_position) == target_product:
+                print(f"Found conversion: {position} can be converted to {filtered_position} with product {target_product}")
                 can_convert = True
                 break
         
         if not can_convert:
-            print(f"No conversion found for {combo}")
-            reduced_non_convertible.append(combo)
+            print(f"No conversion found for {position}")
+            reduced_non_convertible.append(position)
     
     print("\nReduced non-convertible combinations:")
     for rnc in reduced_non_convertible:
