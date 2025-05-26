@@ -8,6 +8,7 @@ import csv
 import argparse
 import sys
 import numpy as np
+import itertools
 
 def count_combinations(n, m):
     """
@@ -25,10 +26,10 @@ def count_combinations(n, m):
     from math import comb
     return comb(n + m - 1, m - 1)
 
-def generate_combinations(count, max_value, mod):
+def generate_combinations(count, max_value, prime):
     """
     Generate all combinations of length count with elements from 1 to max_value,
-    excluding multiples of mod.
+    excluding multiples of prime.
     This function generates combinations WITH repetition, ensuring:
     - Each tuple is sorted in non-decreasing order
     - Order doesn't matter (no permutations)
@@ -36,7 +37,7 @@ def generate_combinations(count, max_value, mod):
     Args:
         count (int): Number of elements in each combination
         max_value (int): Maximum value for each element (1 to max_value)
-        mod (int): Modulo value to exclude multiples of
+        prime (int): Prime number for filtering
         
     Returns:
         list: List of all combinations (with repetition allowed)
@@ -44,11 +45,11 @@ def generate_combinations(count, max_value, mod):
     if count <= 0 or max_value <= 0:
         raise ValueError("count and max_value must be positive integers")
     
-    # If max_value < mod, all numbers are valid since they can't be multiples of mod
-    if max_value < mod:
+    # If max_value < prime, all numbers are valid since they can't be multiples of prime
+    if max_value < prime:
         valid_numbers = list(range(1, max_value + 1))
     else:
-        valid_numbers = [i for i in range(1, max_value + 1) if i % mod != 0]
+        valid_numbers = [i for i in range(1, max_value + 1) if i % prime != 0]
     
     if count == 1:
         return [(i,) for i in valid_numbers]
@@ -58,7 +59,7 @@ def generate_combinations(count, max_value, mod):
     for i in valid_numbers:
         # Generate all (count-1)-tuples with values from i to max_value
         # This ensures that each tuple is sorted
-        smaller_tuples = generate_combinations(count - 1, max_value, mod)
+        smaller_tuples = generate_combinations(count - 1, max_value, prime)
         # Add current value i to each smaller tuple
         for t in smaller_tuples:
             if t[0] >= i:
@@ -66,27 +67,27 @@ def generate_combinations(count, max_value, mod):
     
     return result
 
-def filter_by_mod(combinations, mod):
+def filter_by_prime(combinations, prime):
     """
-    Filter combinations where the product of elements is congruent to 1 modulo mod.
+    Filter combinations where the product of elements is congruent to 1 modulo prime.
     
     Args:
         combinations (list): List of tuples to filter
-        mod (int): Modulo value for filtering
+        prime (int): Prime number for filtering
         
     Returns:
         list: List of filtered combinations
     """
-    return [combo for combo in combinations if np.prod(combo) % mod == 1 and not any(x % mod == 0 for x in combo)]
+    return [combo for combo in combinations if np.prod(combo) % prime == 1 and not any(x % prime == 0 for x in combo)]
 
-def find_non_convertible(combinations, mod):
+def find_non_convertible(combinations, prime):
     """
-    Find combinations that cannot be converted to satisfy the mod condition.
-    A combination is non-convertible if reducing any number cannot make its product congruent to 1 modulo mod.
+    Find combinations that cannot be converted to satisfy the prime condition.
+    A combination is non-convertible if reducing any number cannot make its product congruent to 1 modulo prime.
     
     Args:
         combinations (list): List of tuples to analyze
-        mod (int): Modulo value for checking conversion
+        prime (int): Prime number for checking conversion
         
     Returns:
         list: List of non-convertible combinations
@@ -94,8 +95,8 @@ def find_non_convertible(combinations, mod):
     non_convertible = []
     
     for combo in combinations:
-        # Skip if already satisfies mod condition
-        if np.prod(combo) % mod == 1:
+        # Skip if already satisfies prime condition
+        if np.prod(combo) % prime == 1:
             continue
             
         # Try reducing each number
@@ -108,28 +109,28 @@ def find_non_convertible(combinations, mod):
                     reduced[i] -= reduction
                     reduced_tuple = tuple(sorted(reduced))  # Keep sorted for consistency
                     
-                    # Check if the reduced combination satisfies mod condition
-                    if np.prod(reduced_tuple) % mod == 1 and not any(x % mod == 0 for x in reduced_tuple):
+                    # Check if the reduced combination satisfies prime condition
+                    if np.prod(reduced_tuple) % prime == 1 and not any(x % prime == 0 for x in reduced_tuple):
                         can_convert = True
                         break
                 if can_convert:
                     break
         
-        # If no reduction could make it satisfy mod condition, it's non-convertible
+        # If no reduction could make it satisfy prime condition, it's non-convertible
         if not can_convert:
             non_convertible.append(combo)
     
     return non_convertible
 
-def find_reduced_non_convertible(non_convertible, all_combinations, mod, max_value):
+def find_reduced_non_convertible(non_convertible, all_combinations, prime, max_value):
     """
-    Find combinations that cannot be converted to satisfy the mod condition even after
+    Find combinations that cannot be converted to satisfy the prime condition even after
     replacing any number of numbers with other valid numbers while maintaining product reduction.
     
     Args:
         non_convertible (list): List of non-convertible combinations
         all_combinations (list): List of all valid combinations
-        mod (int): Modulo value for checking conversion
+        prime (int): Prime number for checking conversion
         max_value (int): Maximum value for each element
         
     Returns:
@@ -137,8 +138,8 @@ def find_reduced_non_convertible(non_convertible, all_combinations, mod, max_val
     """
     reduced_non_convertible = []
     
-    # Get all filtered combinations (where product % mod == 1)
-    filtered_combinations = filter_by_mod(all_combinations, mod)
+    # Get all filtered combinations (where product % prime == 1)
+    filtered_combinations = filter_by_prime(all_combinations, prime)
     
     print("\nFiltered combinations:")
     for filtered_combo in filtered_combinations:
@@ -148,11 +149,11 @@ def find_reduced_non_convertible(non_convertible, all_combinations, mod, max_val
         original_product = np.prod(combo)
         
         # Calculate the target product
-        m = original_product % mod
+        m = original_product % prime
         target_product = original_product - m + 1
         
         print(f"\nChecking {combo} for reduction:")
-        print(f"Original product: {original_product}, mod: {mod}, m: {m}, target: {target_product}")
+        print(f"Original product: {original_product}, prime: {prime}, m: {m}, target: {target_product}")
         
         # Check if any filtered combination has the target product
         can_convert = False
@@ -195,8 +196,8 @@ def main():
     parser = argparse.ArgumentParser(description='Generate combinations for multiplicative Nim analysis')
     parser.add_argument('--count', type=int, help='Number of elements in each combination', required=True)
     parser.add_argument('--max_value', type=int, help='Maximum value for each element', required=True)
+    parser.add_argument('--prime', type=int, help='Prime number for filtering', required=True)
     parser.add_argument('--generate', action='store_true', help='Generate combinations')
-    parser.add_argument('--mod', type=int, help='Filter combinations where product % mod = 1')
     parser.add_argument('--debug', action='store_true', help='Show debug information')
     args = parser.parse_args()
     
@@ -223,13 +224,13 @@ def main():
     print(f"\nGenerating all combinations with {count} elements and max value {max_value}")
     print("(Each combination is sorted and unique)\n")
 
-    # Generate all combinations (excluding multiples of mod)
-    all_combinations = generate_combinations(count, max_value, args.mod)
+    # Generate all combinations (excluding multiples of prime)
+    all_combinations = generate_combinations(count, max_value, args.prime)
 
     # Process combinations
-    filtered_combinations = filter_by_mod(all_combinations, args.mod) if args.mod else []
-    non_convertible_combinations = find_non_convertible(all_combinations, args.mod) if args.mod else []
-    reduced_non_convertible = find_reduced_non_convertible(non_convertible_combinations, all_combinations, args.mod, args.max_value) if args.mod else []
+    filtered_combinations = filter_by_prime(all_combinations, args.prime) if args.prime else []
+    non_convertible_combinations = find_non_convertible(all_combinations, args.prime) if args.prime else []
+    reduced_non_convertible = find_reduced_non_convertible(non_convertible_combinations, all_combinations, args.prime, args.max_value) if args.prime else []
     
     # Calculate counts
     filtered_count = len(filtered_combinations)

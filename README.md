@@ -33,18 +33,25 @@ pip3 install -r requirements.txt
 
 The main script is `multiplicative_nim.py`. Run it with:
 ```bash
-python3 multiplicative_nim.py --count 3 --max_value 4 --mod 5
+python3 multiplicative_nim.py --count 3 --max_value 4 --prime 5
 ```
 
 The script will:
 1. Generate all combinations of numbers
-2. Filter combinations based on modular arithmetic
+2. Filter combinations based on prime number arithmetic
 3. Identify non-convertible combinations
 4. Export results to CSV
 
 ## Output
 
 The script generates a CSV file containing the reduced non-convertible combinations, which are positions in the game that cannot be converted to a winning position through multiplication.
+
+The CSV files will be named with the format:
+- `combinations_countX_maxY_primeZ.csv` - All filtered combinations
+- `non_convertible_countX_maxY_primeZ.csv` - Non-convertible combinations
+- `reduced_non_convertible_countX_maxY_primeZ.csv` - Reduced non-convertible combinations
+
+Where X is the count, Y is the max_value, and Z is the prime number.
 
 ## License
 
