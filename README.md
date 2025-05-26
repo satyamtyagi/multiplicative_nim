@@ -26,6 +26,10 @@ The goal is to force your opponent into a losing position where they cannot make
    - The product of all piles is congruent to 1 modulo the prime number
    - The position cannot be converted to a winning position through either move type
 
+4. A position is winning if:
+   - All piles have been reduced to 1 (player who achieves this wins the game)
+   - The player can force the opponent into a losing position through either move type
+
 ## Requirements
 
 - Python 3.7+
