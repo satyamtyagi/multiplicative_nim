@@ -144,7 +144,9 @@ def find_reduced_non_convertible(non_convertible, all_positions, prime, max_valu
     for filtered_position in filtered_positions:
         print(f"Filtered position: {filtered_position}, product: {np.prod(filtered_position)}")
     
-    for combo in non_convertible:
+    for position in non_convertible:
+        # Calculate the original product
+        original_product = np.prod(position)
         
         # Calculate the target product
         m = original_product % prime
