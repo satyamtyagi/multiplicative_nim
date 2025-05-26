@@ -241,7 +241,7 @@ def main():
     # Print summary
     print("\nCounts summary:")
     print(f"Total combinations: {len(all_combinations)}")
-    print(f"Filtered combinations (product % {args.mod} = 1): {filtered_count}")
+    print(f"Filtered combinations (product % {args.prime} = 1): {filtered_count}")
     print(f"Non-convertible combinations: {non_convertible_count}")
     print(f"Reduced non-convertible combinations: {reduced_non_convertible_count}")
     print(f"Convertible combinations: {convertible_count}")
