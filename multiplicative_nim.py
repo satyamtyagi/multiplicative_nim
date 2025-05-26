@@ -137,12 +137,12 @@ def find_reduced_non_convertible(non_convertible, all_positions, prime, max_valu
     """
     reduced_non_convertible = []
     
-    # Get all filtered combinations (where product % prime == 1)
-    filtered_combinations = filter_by_prime(all_combinations, prime)
+    # Get all filtered positions (where product % prime == 1)
+    filtered_positions = filter_by_prime(all_positions, prime)
     
-    print("\nFiltered combinations:")
-    for filtered_combo in filtered_combinations:
-        print(f"Filtered combo: {filtered_combo}, product: {np.prod(filtered_combo)}")
+    print("\nFiltered positions:")
+    for filtered_position in filtered_positions:
+        print(f"Filtered position: {filtered_position}, product: {np.prod(filtered_position)}")
     
     for combo in non_convertible:
         original_product = np.prod(combo)
