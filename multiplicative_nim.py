@@ -26,21 +26,21 @@ def count_combinations(n, m):
     from math import comb
     return comb(n + m - 1, m - 1)
 
-def generate_combinations(count, max_value, prime):
+def generate_positions(count, max_value, prime):
     """
-    Generate all combinations of length count with elements from 1 to max_value,
+    Generate all positions of length count with elements from 1 to max_value,
     excluding multiples of prime.
-    This function generates combinations WITH repetition, ensuring:
+    This function generates positions WITH repetition, ensuring:
     - Each tuple is sorted in non-decreasing order
     - Order doesn't matter (no permutations)
     
     Args:
-        count (int): Number of elements in each combination
+        count (int): Number of elements in each position
         max_value (int): Maximum value for each element (1 to max_value)
         prime (int): Prime number for filtering
         
     Returns:
-        list: List of all combinations (with repetition allowed)
+        list: List of all positions (with repetition allowed)
     """
     if count <= 0 or max_value <= 0:
         raise ValueError("count and max_value must be positive integers")
@@ -67,30 +67,30 @@ def generate_combinations(count, max_value, prime):
     
     return result
 
-def filter_by_prime(combinations, prime):
+def filter_by_prime(positions, prime):
     """
-    Filter combinations where the product of elements is congruent to 1 modulo prime.
+    Filter positions where the product of elements is congruent to 1 modulo prime.
     
     Args:
-        combinations (list): List of tuples to filter
+        positions (list): List of tuples to filter
         prime (int): Prime number for filtering
         
     Returns:
-        list: List of filtered combinations
+        list: List of filtered positions
     """
     return [combo for combo in combinations if np.prod(combo) % prime == 1 and not any(x % prime == 0 for x in combo)]
 
-def find_non_convertible(combinations, prime):
+def find_non_convertible(positions, prime):
     """
-    Find combinations that cannot be converted to satisfy the prime condition.
-    A combination is non-convertible if reducing any number cannot make its product congruent to 1 modulo prime.
+    Find positions that cannot be converted to satisfy the prime condition.
+    A position is non-convertible if reducing any number cannot make its product congruent to 1 modulo prime.
     
     Args:
-        combinations (list): List of tuples to analyze
+        positions (list): List of tuples to analyze
         prime (int): Prime number for checking conversion
         
     Returns:
-        list: List of non-convertible combinations
+        list: List of non-convertible positions
     """
     non_convertible = []
     
@@ -122,19 +122,19 @@ def find_non_convertible(combinations, prime):
     
     return non_convertible
 
-def find_reduced_non_convertible(non_convertible, all_combinations, prime, max_value):
+def find_reduced_non_convertible(non_convertible, all_positions, prime, max_value):
     """
-    Find combinations that cannot be converted to satisfy the prime condition even after
+    Find positions that cannot be converted to satisfy the prime condition even after
     replacing any number of numbers with other valid numbers while maintaining product reduction.
     
     Args:
-        non_convertible (list): List of non-convertible combinations
-        all_combinations (list): List of all valid combinations
+        non_convertible (list): List of non-convertible positions
+        all_positions (list): List of all valid positions
         prime (int): Prime number for checking conversion
         max_value (int): Maximum value for each element
         
     Returns:
-        list: List of reduced non-convertible combinations
+        list: List of reduced non-convertible positions
     """
     reduced_non_convertible = []
     
@@ -173,12 +173,12 @@ def find_reduced_non_convertible(non_convertible, all_combinations, prime, max_v
     
     return reduced_non_convertible
 
-def export_to_csv(combinations, filename):
+def export_to_csv(positions, filename):
     """
-    Export combinations to a CSV file.
+    Export positions to a CSV file.
     
     Args:
-        combinations (list): List of tuples to export
+        positions (list): List of tuples to export
         filename (str): Name of the output CSV file
     """
     # Create header based on tuple length
@@ -224,13 +224,13 @@ def main():
     print(f"\nGenerating all combinations with {count} elements and max value {max_value}")
     print("(Each combination is sorted and unique)\n")
 
-    # Generate all combinations (excluding multiples of prime)
-    all_combinations = generate_combinations(count, max_value, args.prime)
+    # Generate all positions (excluding multiples of prime)
+    all_positions = generate_positions(count, max_value, args.prime)
 
-    # Process combinations
-    filtered_combinations = filter_by_prime(all_combinations, args.prime) if args.prime else []
-    non_convertible_combinations = find_non_convertible(all_combinations, args.prime) if args.prime else []
-    reduced_non_convertible = find_reduced_non_convertible(non_convertible_combinations, all_combinations, args.prime, args.max_value) if args.prime else []
+    # Process positions
+    filtered_positions = filter_by_prime(all_positions, args.prime) if args.prime else []
+    non_convertible_positions = find_non_convertible(all_positions, args.prime) if args.prime else []
+    reduced_non_convertible = find_reduced_non_convertible(non_convertible_positions, all_positions, args.prime, args.max_value) if args.prime else []
     
     # Calculate counts
     filtered_count = len(filtered_combinations)
@@ -276,19 +276,19 @@ def main():
             print(f"Target product: {target_product}")
 
     # Export to CSV files
-    if filtered_combinations:
-        print(f"\nExporting filtered combinations to combinations_count{count}_max{max_value}_prime{args.prime}.csv...")
-        export_to_csv(filtered_combinations, f"combinations_count{count}_max{max_value}_prime{args.prime}.csv")
+    if filtered_positions:
+        print(f"\nExporting filtered positions to positions_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(filtered_positions, f"positions_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
-    if non_convertible_combinations:
-        print(f"\nExporting non-convertible combinations to non_convertible_count{count}_max{max_value}_prime{args.prime}.csv...")
-        export_to_csv(non_convertible_combinations, f"non_convertible_count{count}_max{max_value}_prime{args.prime}.csv")
+    if non_convertible_positions:
+        print(f"\nExporting non-convertible positions to non_convertible_positions_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(non_convertible_positions, f"non_convertible_positions_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
     if reduced_non_convertible:
-        print(f"\nExporting reduced non-convertible combinations to reduced_non_convertible_count{count}_max{max_value}_prime{args.prime}.csv...")
-        export_to_csv(reduced_non_convertible, f"reduced_non_convertible_count{count}_max{max_value}_prime{args.prime}.csv")
+        print(f"\nExporting reduced non-convertible positions to reduced_non_convertible_positions_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(reduced_non_convertible, f"reduced_non_convertible_positions_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
 if __name__ == "__main__":
