@@ -78,7 +78,7 @@ def filter_by_prime(positions, prime):
     Returns:
         list: List of filtered positions
     """
-    return [combo for combo in combinations if np.prod(combo) % prime == 1 and not any(x % prime == 0 for x in combo)]
+    return [position for position in positions if np.prod(position) % prime == 1 and not any(x % prime == 0 for x in position)]
 
 def find_non_convertible(positions, prime):
     """
