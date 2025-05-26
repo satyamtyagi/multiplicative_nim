@@ -94,31 +94,30 @@ def find_non_convertible(positions, prime):
     """
     non_convertible = []
     
-    for combo in combinations:
+    for position in positions:
         # Skip if already satisfies prime condition
-        if np.prod(combo) % prime == 1:
+        if np.prod(position) % prime == 1:
             continue
             
         # Try reducing each number
         can_convert = False
-        for i in range(len(combo)):
-            if combo[i] > 1:  # Only try to reduce numbers greater than 1
-                for reduction in range(1, combo[i]):  # Try all possible reductions
-                    # Create a new combination with reduced value
-                    reduced = list(combo)
-                    reduced[i] -= reduction
-                    reduced_tuple = tuple(sorted(reduced))  # Keep sorted for consistency
-                    
-                    # Check if the reduced combination satisfies prime condition
-                    if np.prod(reduced_tuple) % prime == 1 and not any(x % prime == 0 for x in reduced_tuple):
-                        can_convert = True
-                        break
-                if can_convert:
+        for i in range(len(position)):
+            if position[i] > 1:
+                # Try reducing this number by 1
+                reduced = list(position)
+                reduced[i] -= 1
+                reduced_tuple = tuple(sorted(reduced))  # Keep sorted for consistency
+                
+                # Check if the reduced combination satisfies prime condition
+                if np.prod(reduced_tuple) % prime == 1 and not any(x % prime == 0 for x in reduced_tuple):
+                    can_convert = True
                     break
-        
+        if can_convert:
+            continue
+            
         # If no reduction could make it satisfy prime condition, it's non-convertible
         if not can_convert:
-            non_convertible.append(combo)
+            non_convertible.append(position)
     
     return non_convertible
 
