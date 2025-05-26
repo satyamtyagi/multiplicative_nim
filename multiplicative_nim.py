@@ -59,7 +59,7 @@ def generate_positions(count, max_value, prime):
     for i in valid_numbers:
         # Generate all (count-1)-tuples with values from i to max_value
         # This ensures that each tuple is sorted
-        smaller_tuples = generate_combinations(count - 1, max_value, prime)
+        smaller_tuples = generate_positions(count - 1, max_value, prime)
         # Add current value i to each smaller tuple
         for t in smaller_tuples:
             if t[0] >= i:
