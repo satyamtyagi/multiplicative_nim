@@ -277,18 +277,18 @@ def main():
 
     # Export to CSV files
     if filtered_combinations:
-        print("\nExporting filtered combinations to combinations_count%d_max%d_mod%d.csv..." % (count, max_value, args.mod))
-        export_to_csv(filtered_combinations, f"combinations_count{count}_max{max_value}_mod{args.mod}.csv")
+        print(f"\nExporting filtered combinations to combinations_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(filtered_combinations, f"combinations_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
     if non_convertible_combinations:
-        print("\nExporting non-convertible combinations to non_convertible_count%d_max%d_mod%d.csv..." % (count, max_value, args.mod))
-        export_to_csv(non_convertible_combinations, f"non_convertible_count{count}_max{max_value}_mod{args.mod}.csv")
+        print(f"\nExporting non-convertible combinations to non_convertible_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(non_convertible_combinations, f"non_convertible_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
     if reduced_non_convertible:
-        print("\nExporting reduced non-convertible combinations to reduced_non_convertible_count%d_max%d_mod%d.csv..." % (count, max_value, args.mod))
-        export_to_csv(reduced_non_convertible, f"reduced_non_convertible_count{count}_max{max_value}_mod{args.mod}.csv")
+        print(f"\nExporting reduced non-convertible combinations to reduced_non_convertible_count{count}_max{max_value}_prime{args.prime}.csv...")
+        export_to_csv(reduced_non_convertible, f"reduced_non_convertible_count{count}_max{max_value}_prime{args.prime}.csv")
         print("Done!")
 
 if __name__ == "__main__":
