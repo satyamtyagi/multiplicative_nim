@@ -233,14 +233,14 @@ def main():
     reduced_non_convertible = find_reduced_non_convertible(non_convertible_positions, all_positions, args.prime, args.max_value) if args.prime else []
     
     # Calculate counts
-    filtered_count = len(filtered_combinations)
-    non_convertible_count = len(non_convertible_combinations)
+    filtered_count = len(filtered_positions)
+    non_convertible_count = len(non_convertible_positions)
     reduced_non_convertible_count = len(reduced_non_convertible)
-    convertible_count = len(all_combinations) - filtered_count - non_convertible_count - reduced_non_convertible_count
+    convertible_count = len(all_positions) - non_convertible_count - non_convertible_count - reduced_non_convertible_count
 
     # Print summary
     print("\nCounts summary:")
-    print(f"Total combinations: {len(all_combinations)}")
+    print(f"Total combinations: {len(all_positions)}")
     print(f"Filtered combinations (product % {args.prime} = 1): {filtered_count}")
     print(f"Non-convertible combinations: {non_convertible_count}")
     print(f"Reduced non-convertible combinations: {reduced_non_convertible_count}")
