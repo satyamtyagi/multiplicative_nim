@@ -117,11 +117,11 @@ def find_non_convertible(positions: List[Tuple[int, ...]], prime: int, max_value
         if np.prod(position) % prime == 1:
             continue
             
-        # Try reducing each number by any amount
+        # Try reducing each number by amounts between 1 and prime-1
         can_convert = False
         for i in range(len(position)):
-            # Try all possible reductions of this number
-            for reduction in range(1, position[i]):
+            # Try reductions between 1 and prime-1
+            for reduction in range(1, min(position[i], prime)):
                 reduced = list(position)
                 reduced[i] -= reduction
                 

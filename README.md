@@ -22,6 +22,7 @@ The goal is to force your opponent into a losing position where they cannot make
 2. Each move must be one of two types:
    - Subtract any positive amount from a single pile
    - Reduce the product of all piles by a factor, where the reduction cannot exceed the specified prime number
+   - When reducing a single pile, the reduction must be between 1 and prime-1
 3. A position is losing if:
    - The product of all piles is congruent to 1 modulo the prime number
    - The position cannot be converted to a winning position through either move type
