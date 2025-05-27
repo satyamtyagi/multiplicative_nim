@@ -291,9 +291,12 @@ def main():
             export_to_csv(positions, args.output)
             if args.verbose:
                 print(f"Exporting specialized results...")
-                export_to_csv(losing_positions, f"losing_{args.output}")
-                export_to_csv(non_convertible, f"non_convertible_{args.output}")
-                export_to_csv(reduced_non_convertible, f"reduced_non_convertible_{args.output}")
+                if losing_positions:
+                    export_to_csv(losing_positions, f"losing_{args.output}")
+                if non_convertible:
+                    export_to_csv(non_convertible, f"non_convertible_{args.output}")
+                if reduced_non_convertible:
+                    export_to_csv(reduced_non_convertible, f"reduced_non_convertible_{args.output}")
         except RuntimeError as e:
             print(f"Error exporting CSV: {e}")
             sys.exit(1)
